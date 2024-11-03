@@ -9,6 +9,7 @@ import {
 import Contact from '../Contact/Contact';
 import css from './ContactList.module.css';
 import { fetchContacts } from '../../redux/contactsOps';
+import { useEffect } from 'react';
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,9 @@ const ContactList = () => {
   const isLoading = useSelector(selectLoading);
   const error = useSelector(selectError);
 
-  dispatch(fetchContacts());
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const filterValue = useSelector(state => state.filters.name);
 
@@ -26,6 +29,8 @@ const ContactList = () => {
 
   return (
     <div className={css.wrapper}>
+      {isLoading && !error && <b>Request in progress...</b>}
+
       {filteredContacts.map(contact => {
         return (
           <Contact
